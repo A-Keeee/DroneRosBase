@@ -129,4 +129,36 @@
 >+ 列数（内点）11  
 >+ 方块边长 0.06 米  
 
+## 键盘控制模块
+本仓库提供一个基于键盘控制的 ROS 节点（`keyboard_teleop.py`），可在模拟器中通过键盘实时控制无人机。
+
+### 使用方式
+1. 进入工作目录并编译（如尚未编译）：
+   ```bash
+   cd /path/to/IntelligentUAVChampionshipBase/basic_dev
+   catkin_make
+   source devel/setup.bash
+   ```
+2. 启动 docker 镜像后，在容器内运行：
+   ```bash
+   rosrun controller keyboard_teleop.py
+   ```
+
+### 键位说明
+- 方向控制：
+  - `i`：前进（vx+）
+  - `k`：后退（vx-）
+  - `j`：左移（vy+）
+  - `l`：右移（vy-）
+  - `u` / ↑：上升（vz+）
+  - `o` / ↓：下降（vz-）
+  - `a`：逆时针偏航（yawRate+）
+  - `d`：顺时针偏航（yawRate-）
+
+- 命令：
+  - `t`：起飞
+  - `b`：降落
+  - `r`：重置
+  - `SPACE`：紧急停（悬停）
+
 
