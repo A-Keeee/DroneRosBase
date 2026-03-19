@@ -40,3 +40,8 @@ include_directories(include ${catkin_INCLUDE_DIRS} ${OpenCV_INCLUDE_DIRS})
 add_executable(controller_test src/controllerTest.cpp src/PDcontroller.cpp)
 target_link_libraries(controller_test
   ${catkin_LIBRARIES} ${OpenCV_LIBRARIES})
+
+catkin_install_python(PROGRAMS
+  scripts/keyboard_teleop.py
+  DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+)

@@ -12,7 +12,8 @@ RUN apt update && apt install -y \
   ros-noetic-tf2-sensor-msgs ros-noetic-tf2-geometry-msgs \
   ros-noetic-image-transport ros-noetic-cv-bridge \
   ros-noetic-pcl-ros ros-noetic-pcl-conversions \
-  libopencv-dev ros-noetic-libg2o libsuitesparse-dev net-tools
+  libopencv-dev ros-noetic-libg2o libsuitesparse-dev net-tools \
+  net-tools wget
 
 ENV ROS_DISTRO noetic
 
