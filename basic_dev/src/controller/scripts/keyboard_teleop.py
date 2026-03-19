@@ -1,51 +1,10 @@
 #!/usr/bin/env python3
 
 import rospy
-import struct
-import genpy
 from std_msgs.msg import Header
 from airsim_ros.srv import Takeoff, Land, Reset
+from airsim_ros.msg import VelCmd
 import sys, select, termios, tty
-
-# Dynamically construct the correct Simulator VelCmd
-# (matches the simulator's expected message structure, not the local .msg file)
-class SimulatorVelCmd(genpy.Message):
-    _md5sum = "1a888a503939ba521aed68feee8eab6d"
-    _type = "airsim_ros/VelCmd"
-    _has_header = True
-    _full_text = """std_msgs/Header header
-float64 vx
-float64 vy
-float64 vz
-float64 yawRate
-uint8 va
-uint8 stop
-================================================================================
-MSG: std_msgs/Header
-uint32 seq
-time stamp
-string frame_id
-"""
-    __slots__ = ['header', 'vx', 'vy', 'vz', 'yawRate', 'va', 'stop']
-    _slot_types = ['std_msgs/Header', 'float64', 'float64', 'float64', 'float64', 'uint8', 'uint8']
-
-    def __init__(self, *args, **kwds):
-        super(SimulatorVelCmd, self).__init__(*args, **kwds)
-        if self.header is None:
-            self.header = Header()
-        if self.vx is None: self.vx = 0.
-        if self.vy is None: self.vy = 0.
-        if self.vz is None: self.vz = 0.
-        if self.yawRate is None: self.yawRate = 0.
-        if self.va is None: self.va = 0
-        if self.stop is None: self.stop = 0
-
-    def serialize(self, buff):
-        self.header.serialize(buff)
-        buff.write(struct.Struct("<4d2B").pack(self.vx, self.vy, self.vz, self.yawRate, self.va, self.stop))
-
-    def deserialize(self, str):
-        pass
 
 msg = """
 --------------------------------------------------
@@ -102,7 +61,7 @@ def getKey():
 
 def main():
     rospy.init_node('keyboard_teleop')
-    pub = rospy.Publisher('/airsim_node/drone_1/vel_body_cmd', SimulatorVelCmd, queue_size=10)
+    pub = rospy.Publisher('/airsim_node/drone_1/vel_body_cmd', VelCmd, queue_size=10)
 
     rospy.loginfo("Waiting for services (timeout 2s)...")
     try:
@@ -179,7 +138,7 @@ def main():
                 vx = 0; vy = 0; vz = 0; yaw = 0
                 stop_flag = 0
 
-            cmd = SimulatorVelCmd()
+            cmd = VelCmd()
             cmd.header.stamp = rospy.Time.now()
             cmd.vx      = float(vx * speed)
             cmd.vy      = float(vy * speed)
@@ -195,7 +154,7 @@ def main():
         print(e)
     finally:
         # Send stop command on exit
-        cmd = SimulatorVelCmd()
+        cmd = VelCmd()
         cmd.header.stamp = rospy.Time.now()
         cmd.stop = 1
         cmd.va = 0

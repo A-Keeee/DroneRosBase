@@ -141,7 +141,7 @@
    ```
 2. 启动 docker 镜像后，在容器内运行：
    ```bash
-   rosrun controller keyboard_teleop.py
+   rosrun controller_test keyboard_teleop.py
    ```
 
 ### 键位说明

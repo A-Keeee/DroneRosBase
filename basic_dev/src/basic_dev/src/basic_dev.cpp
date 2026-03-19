@@ -23,10 +23,12 @@ BasicDev::BasicDev(ros::NodeHandle *nh)
     land.request.waitOnLastTask = 1;
 
     // 使用publisher发布速度指令需要定义 Velcmd , 并赋予相应的值后，将他publish（）出去
-    velcmd.twist.angular.z = 0;//z方向角速度(yaw, deg)
-    velcmd.twist.linear.x = 0; //x方向线速度(m/s)
-    velcmd.twist.linear.y = 0;//y方向线速度(m/s)
-    velcmd.twist.linear.z = 0; //z方向线速度(m/s)
+    velcmd.yawRate = 0;//z方向角速度(yaw, deg)
+    velcmd.vx = 0; //x方向线速度(m/s)
+    velcmd.vy = 0;//y方向线速度(m/s)
+    velcmd.vz = 0; //z方向线速度(m/s)
+    velcmd.va = 0;
+    velcmd.stop = 0;
 
     //无人机信息通过如下命令订阅，当收到消息时自动回调对应的函数
     odom_suber = nh->subscribe<geometry_msgs::PoseStamped>("/airsim_node/drone_1/debug/pose_gt", 1, std::bind(&BasicDev::pose_cb, this, std::placeholders::_1));//状态真值，用于赛道一

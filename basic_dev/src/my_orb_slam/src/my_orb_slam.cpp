@@ -486,36 +486,38 @@ void OrbSlam::publish_avoidance_cmd()
     }
 
     airsim_ros::VelCmd cmd;
-    cmd.twist.linear.x = 0.0;
-    cmd.twist.linear.y = 0.0;
-    cmd.twist.linear.z = 0.0;
-    cmd.twist.angular.z = 0.0;
+    cmd.vx = 0.0;
+    cmd.vy = 0.0;
+    cmd.vz = 0.0;
+    cmd.yawRate = 0.0;
+    cmd.va = 0;
+    cmd.stop = 0;
 
     if(!obstacle_state_.has_obstacle)
     {
-        cmd.twist.linear.x = cruise_speed_;
+        cmd.vx = cruise_speed_;
         avoidance_cmd_puber.publish(cmd);
         return;
     }
 
     if(obstacle_state_.min_front_distance <= obstacle_stop_distance_)
     {
-        cmd.twist.linear.x = 0.0;
+        cmd.vx = 0.0;
     }
     else
     {
         const double ratio = (obstacle_state_.min_front_distance - obstacle_stop_distance_) /
                              std::max(0.1, obstacle_slow_distance_ - obstacle_stop_distance_);
-        cmd.twist.linear.x = std::min(cruise_speed_ * 0.6, cruise_speed_ * std::max(0.0, ratio));
+        cmd.vx = std::min(cruise_speed_ * 0.6, cruise_speed_ * std::max(0.0, ratio));
     }
 
     const bool go_left = obstacle_state_.min_left_distance >= obstacle_state_.min_right_distance;
-    cmd.twist.linear.y = (go_left ? 1.0 : -1.0) * avoid_lateral_speed_;
-    cmd.twist.angular.z = (go_left ? 1.0 : -1.0) * avoid_yaw_rate_;
+    cmd.vy = (go_left ? 1.0 : -1.0) * avoid_lateral_speed_;
+    cmd.yawRate = (go_left ? 1.0 : -1.0) * avoid_yaw_rate_;
     if(!obstacle_state_.is_dynamic)
     {
-        cmd.twist.linear.y *= 0.6;
-        cmd.twist.angular.z *= 0.6;
+        cmd.vy *= 0.6;
+        cmd.yawRate *= 0.6;
     }
 
     avoidance_cmd_puber.publish(cmd);
