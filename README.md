@@ -65,7 +65,7 @@
 
 #### 千里AIR扩展
 `./run_basic_dev_dev_gui.sh`
->>启动docker镜像，可以启动可视化界面，如rviz
+>启动docker镜像，可以启动可视化界面，如rviz
 `catkin_make`
 `source ./devel/setup.bash`
 `rosrun [功能包] [节点]`
