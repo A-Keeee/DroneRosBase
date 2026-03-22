@@ -1,0 +1,22 @@
+<launch>
+    <!-- ====== 参数声明 ====== -->
+    <arg name="voc_file"     default="$(find orb_slam3_ros_wrapper)/../ORB_SLAM3/Vocabulary/ORBvoc.txt"/>
+    <arg name="settings_file" default="$(find orb_slam3_ros_wrapper)/../ORB_SLAM3/Examples/Stereo-Inertial/EuRoC.yaml"/>
+    <arg name="do_rectify"   default="false"/>
+    <arg name="do_equalize"  default="false"/>
+    <arg name="open_rviz"    default="true"/>
+
+    <!-- ====== 动态库路径 ====== -->
+    <env name="LD_LIBRARY_PATH" value="/usr/local/lib:$(env LD_LIBRARY_PATH)"/>
+
+    <!-- ====== ORB-SLAM3 Stereo-Inertial 节点 ====== -->
+    <node pkg="orb_slam3_ros_wrapper" type="stereo_inertial_node" name="stereo_inertial_node"
+          output="screen"
+          args="$(arg voc_file) $(arg settings_file) $(arg do_rectify) $(arg do_equalize)"/>
+
+    <!-- ====== RViz 可视化 ====== -->
+    <node if="$(arg open_rviz)"
+          pkg="rviz" type="rviz" name="slam_rviz"
+          args="-d $(find orb_slam3_ros_wrapper)/launch/slam.rviz"
+          required="false"/>
+</launch>
