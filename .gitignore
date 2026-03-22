@@ -1,3 +1,7 @@
-/basic_dev/build/
-/basic_dev/.vscode/
-/basic_dev/devel/
+build
+.vscode
+devel
+install
+log
+logs
+lib
